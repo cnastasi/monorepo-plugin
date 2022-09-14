@@ -1,7 +1,6 @@
 {
   "type": "composer-plugin",
   "name": "cnastasi/monorepo-plugin",
-  "version": "1.0",
   "require": {
     "composer-plugin-api": "^2.0"
   },
