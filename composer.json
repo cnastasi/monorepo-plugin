@@ -1,0 +1,19 @@
+{
+  "type": "composer-plugin",
+  "name": "cnastasi/monorepo-plugin",
+  "version": "1.0",
+  "require": {
+    "composer-plugin-api": "^2.0",
+  },
+  "require-dev": {
+    "composer/composer": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cnastasi\\MonorepoPlugin\\": "src/"
+    }
+  },
+  "extra": {
+    "class": "Cnastasi\\MonorepoPlugin\\MonorepoPlugin"
+  }
+}
