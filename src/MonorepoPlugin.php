@@ -13,12 +13,16 @@ class MonorepoPlugin implements PluginInterface
 {
     public function activate(Composer $composer, IOInterface $io)
     {
-        $path = $this->getPathsFromExtra($composer->getPackage());
+        $paths = $this->getPathsFromExtra($composer->getPackage());
 
-        if ($path) {
-            $folder = $this->getFolder($path);
+        if (count($paths) > 0) {
+            $io->write('Monorepo Plugin activated!');
 
-            $this->loadPaths($io, $composer->getRepositoryManager(), $folder);
+            foreach ($paths as $path) {
+                $folder = $this->getFolder($path);
+
+                $this->loadPaths($io, $composer->getRepositoryManager(), $folder);
+            }
         }
 //
     }
@@ -39,22 +43,22 @@ class MonorepoPlugin implements PluginInterface
             if ($item->isDot() || $item->isFile()) continue;
 
             $isPackage = $this->isPackage($item) ? 'YES' : 'NO';
-            echo "{$item->getFilename()} [{$isPackage}]";
+            $io->debug("Found [{$item->getFilename()}]. Is a package? [{$isPackage}]");
 
             if ($this->isPackage($item)) {
                 $config = ['url' => $item->getRealPath()];
                 $repo = $repositoryManager->createRepository('path', $config);
                 $repositoryManager->addRepository($repo);
             }
-
-            echo "\n";
         }
 
+        /**
         $repositories = $repositoryManager->getRepositories();
 
         foreach ($repositories as $repository) {
             echo $repository->getRepoName() . "\n";
         }
+         */
     }
 
     private function isPackage(DirectoryIterator $folder): bool
@@ -62,14 +66,13 @@ class MonorepoPlugin implements PluginInterface
         return file_exists($folder->getRealPath() . DIRECTORY_SEPARATOR . 'composer.json');
     }
 
-    /**
-     * @return string|null
-     */
-    protected function getPathsFromExtra(PackageInterface $package): ?string
+    protected function getPathsFromExtra(PackageInterface $package): array
     {
         $extra = $package->getExtra();
 
-        return $extra['monorepo_path'] ?? null;
+        $paths = $extra['monorepo_paths'] ?? [];
+
+        return is_array($paths) ? $paths : [$paths];
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
