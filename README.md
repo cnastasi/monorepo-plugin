@@ -20,6 +20,14 @@ Inside the `composer.json` add this:
     ]
   }
 ```
+or, for retrocompatibility, this:
+```
+"extra": {
+    "monorepo_path": "relative/path/where/the/modules/are/located"
+  }
+```
+
+Both ways are possible, but it is not recommended 
 
 ## Explanation
 When you work with a mono repo in php, and you code is split in many packages required through composer, 

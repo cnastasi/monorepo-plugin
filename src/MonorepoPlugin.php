@@ -72,7 +72,24 @@ class MonorepoPlugin implements PluginInterface
 
         $paths = $extra['monorepo_paths'] ?? [];
 
-        return is_array($paths) ? $paths : [$paths];
+        assert(is_array($paths), 'paths field expected to be an array');
+
+        $path = $extra['monorepo_path'] ?? null;
+
+        assert(is_string($path) || $path === null, 'path field expected to be a string');
+
+        if ($path) {
+            $paths[] = $path;
+        }
+
+        return $paths;
+    }
+
+    protected function getPathFromExtra(PackageInterface $package): ?string
+    {
+        $extra = $package->getExtra();
+
+        return  $extra['monorepo_path'] ?? null;
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
