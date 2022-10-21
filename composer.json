@@ -1,7 +1,7 @@
 {
   "type": "composer-plugin",
   "name": "cnastasi/monorepo-plugin",
-  "version": "0.6.0",
+  "license": "MIT",
   "require": {
     "composer-plugin-api": "^2.0"
   },
